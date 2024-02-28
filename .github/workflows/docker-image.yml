@@ -27,13 +27,13 @@ jobs:
       
       - name: Convert username to lower case for Docker
         id: string_user
-        uses: ASzc/change-string-case-action@v5
+        uses: ASzc/change-string-case-action@v6
         with:
           string: ${{ github.repository_owner }}
       
       - name: Convert repo to lower case for Docker
         id: string_repo
-        uses: ASzc/change-string-case-action@v5
+        uses: ASzc/change-string-case-action@v6
         with:
           string: ${{ github.repository }}
       
