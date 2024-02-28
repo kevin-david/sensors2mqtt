@@ -1,4 +1,10 @@
-![Docker Pulls](https://img.shields.io/docker/pulls/kevinpdavid/sensors2mqtt?link=https%3A%2F%2Fhub.docker.com%2Fr%2Fkevinpdavid%2Fsensors2mqtt) ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/kevin-david/sensors2mqtt/docker-image.yml)
+<a href="https://hub.docker.com/r/kevinpdavid/sensors2mqtt">
+  <img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/kevinpdavid/sensors2mqtt">
+</a>
+&nbsp;
+<a href="https://github.com/kevin-david/sensors2mqtt/actions/workflows/docker-image.yml">
+  <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/kevin-david/sensors2mqtt/docker-image.yml">
+</a>
 
 pushes lm-sensors and nvidia-smi to mqtt. Also creates home assistant sensors for these resources
 
