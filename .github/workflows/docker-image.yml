@@ -42,7 +42,7 @@ jobs:
       
       - name: Login to Docker Hub
         if: ${{ steps.vars.outputs.HAS_SECRET_TOKEN == 'true' }}
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: docker.io
           username: ${{ vars.DOCKER_USERNAME || steps.string_user.outputs.lowercase }}
