@@ -99,6 +99,6 @@ jobs:
           push: ${{ steps.vars.outputs.HAS_SECRET_TOKEN == 'true' && github.event_name != 'pull_request' }}
           file: Dockerfile
           tags: ${{ steps.tags.outputs.TAGS }}
-          build-args: VERSION=${{ steps.toml.outputs.version }}, REPO=${{ github.repository }}, OWNER=${{ vars.DOCKER_USERNAME || github.repository_owner }}
+          build-args: REPO=${{ github.repository }}, OWNER=${{ vars.DOCKER_USERNAME || github.repository_owner }}
         env:
           DOCKER_BUILDKIT: 1
