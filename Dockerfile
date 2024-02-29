@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.3.1-base-ubuntu22.04
+FROM nvidia/cuda:12.3.2-base-ubuntu22.04
 ARG NODE_MAJOR=20
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
