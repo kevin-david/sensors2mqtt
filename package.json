@@ -20,6 +20,6 @@
     "@types/node": "^20.11.30",
     "nodemon": "^3.0.2",
     "tsc": "^2.0.4",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.4"
   }
 }
