@@ -173,7 +173,7 @@ const envResult = z
     MQTT_TOPIC: z.string().default("sensors2mqtt"),
     INTERVAL: z
       .preprocess((arg, ctx) => parseInt(String(arg), 10), z.number())
-      .default(3000),
+      .default(10000),
   })
   .safeParse(process.env);
 
@@ -199,7 +199,7 @@ const cleanUpServer = (eventType: string) => {
   client.publish(
     `${env.MQTT_TOPIC}/server`,
     getAvailabilityPayload("offline"),
-    { retain: true, qos: 1 },
+    { retain: true, qos: 2 },
     () => {
       process.exit(eventType === "exit" ? 0 : 1);
     }
@@ -207,7 +207,7 @@ const cleanUpServer = (eventType: string) => {
 };
 
 [
-  `exit`,
+  //`exit`,
   `SIGINT`,
   `SIGUSR1`,
   `SIGUSR2`,
@@ -230,8 +230,13 @@ while (true) {
 
       res = await client.publishAsync(
         `${env.MQTT_TOPIC}/lm-sensors/${deviceName}`,
-        JSON.stringify(deviceData)
+        JSON.stringify(deviceData),
+        { qos: 2 }
       );
+
+      // console.log(
+      //   `Published ${deviceName} to MQTT. Message ID: ${res?.messageId}`
+      // );
 
       for (let [sensorName, sensorData] of Object.entries(deviceData)) {
         if (sensorName === "Adapter") continue;
@@ -246,7 +251,8 @@ while (true) {
         if (!discoveriesPublished.has(haEntity.object_id)) {
           res = await client.publishAsync(
             `homeassistant/sensor/${haEntity.object_id}/config`,
-            JSON.stringify(haEntity)
+            JSON.stringify(haEntity),
+            { qos: 2 }
           );
         }
 
@@ -268,12 +274,18 @@ while (true) {
     const nvidiaSMIOutput = resultNvidiaSMI.stdout.toString();
     const nvidiaSMIParsed = parseNvidiaSMI(nvidiaSMIOutput);
     // console.log(nvidiaSMIParsed);
+
     for (let [deviceName, deviceData] of Object.entries(nvidiaSMIParsed)) {
       deviceName = getMqttTopicFriendlyName(deviceName);
       res = await client.publishAsync(
         `${env.MQTT_TOPIC}/nvidia-smi/${deviceName}`,
-        JSON.stringify(deviceData)
+        JSON.stringify(deviceData),
+        { qos: 2 }
       );
+
+      // console.log(
+      //   `Published ${deviceName} to MQTT. Message ID: ${res?.messageId}`
+      // );
 
       for (const [sensorName, sensorData] of Object.entries(deviceData)) {
         try {
@@ -289,7 +301,8 @@ while (true) {
           if (!discoveriesPublished.has(haEntity.object_id)) {
             res = await client.publishAsync(
               `homeassistant/sensor/${haEntity.object_id}/config`,
-              JSON.stringify(haEntity)
+              JSON.stringify(haEntity),
+              { qos: 2 }
             );
           }
 
@@ -306,7 +319,8 @@ while (true) {
 
   res = await client.publishAsync(
     `${env.MQTT_TOPIC}/server`,
-    getAvailabilityPayload("online")
+    getAvailabilityPayload("online"),
+    { qos: 2 }
   );
 
   await delay(env.INTERVAL);
