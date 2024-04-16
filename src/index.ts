@@ -217,6 +217,8 @@ const cleanUpServer = (eventType: string) => {
   process.on(eventType, cleanUpServer.bind(null, eventType));
 });
 
+console.log("Connected to MQTT broker - publishing messages...");
+
 let res: Packet | undefined;
 while (true) {
   const resultLMSensors = spawnSync("sensors", ["-j"]);

@@ -1,18 +1,17 @@
 {
   "name": "sensors2mqtt",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node-esm src/index.ts",
-    "start": "NODE_OPTIONS='--inspect=0.0.0.0:9229' ts-node-esm src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "start": "NODE_OPTIONS='--inspect=0.0.0.0:9229' tsx src/index.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "child_process": "^1.0.2",
     "mqtt": "^5.5.2",
-    "ts-node": "^10.9.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -28,7 +27,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "globals": "^15.0.0",
     "nodemon": "^3.0.2",
-    "tsc": "^2.0.4",
+    "tsx": "^4.7.2",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.7.0"
   },
