@@ -9,6 +9,10 @@ import { hostname } from "os";
 const availabilityTemplate =
   '{% if value_json.state == "online" and as_datetime(value_json.last_update) > now() - timedelta(minutes = 1) %} online {% else %} offline {% endif %}';
 
+const log = (message: string) => {
+  console.log("%s | %s", new Date().toISOString(), message);
+};
+
 const lmSensorsHaEntity = (
   topic: string,
   deviceName: string,
@@ -30,7 +34,7 @@ const lmSensorsHaEntity = (
     unit = "RPM";
   }
   if (sensorType === undefined) {
-    console.log("unknown sensor type", sensorName, sensorData);
+    log(`unknown sensor type for ${sensorName}, data: ${sensorData}`);
     return null;
   }
   const x_input = Object.keys(sensorData).find((key) => key.endsWith("_input"));
@@ -114,7 +118,7 @@ const nvidiaSmiHaEntity = (
     data = data.replace("MiB", "").trim();
   }
   if (sensorType === undefined) {
-    console.log("unknown sensor type", sensorName, sensorData);
+    log(`unknown sensor type for ${sensorName}, data: ${sensorData}`);
     return null;
   }
   const cleanSensorName = getMqttTopicFriendlyName(sensorName);
@@ -178,7 +182,7 @@ const envResult = z
   .safeParse(process.env);
 
 if (!envResult.success) {
-  console.log("ERROR: Please set all required env vars");
+  log("ERROR: Please set all required env vars");
   console.error(envResult.error.message);
   exit(1);
 }
@@ -194,7 +198,7 @@ const discoveriesPublished = new Set<string>();
 const client = await connectAsync(env.MQTT_URL, options);
 
 const cleanUpServer = (eventType: string) => {
-  console.log(`Received ${eventType}, cleaning up...`);
+  log(`Received ${eventType}, cleaning up...`);
 
   client.publish(
     `${env.MQTT_TOPIC}/server`,
@@ -217,10 +221,15 @@ const cleanUpServer = (eventType: string) => {
   process.on(eventType, cleanUpServer.bind(null, eventType));
 });
 
-console.log("Connected to MQTT broker - publishing messages...");
+log("Connected to MQTT broker - publishing messages...");
 
 let res: Packet | undefined;
 while (true) {
+  if (client.connected === false) {
+    log("MQTT connection lost, exiting...");
+    process.exit(1);
+  }
+
   const resultLMSensors = spawnSync("sensors", ["-j"]);
   if (resultLMSensors.status == 0) {
     const sensorsOutput = resultLMSensors.stdout.toString();
@@ -323,6 +332,10 @@ while (true) {
     `${env.MQTT_TOPIC}/server`,
     getAvailabilityPayload("online"),
     { qos: 2 }
+  );
+
+  log(
+    `Published availability message to MQTT. Message ID: ${res?.messageId}. Delaying for ${env.INTERVAL}ms...`
   );
 
   await delay(env.INTERVAL);

@@ -1,0 +1,21 @@
+services:
+  sensors2mqtt:
+    container_name: sensors2mqtt
+    privileged: true
+    restart: unless-stopped
+    image: kevinpdavid/sensors2mqtt:main
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities:
+                - gpu
+    environment:
+      # - MQTT_URL=<REQUIRED, FILL IN>
+      # - MQTT_TOPIC=sensors2mqtt #this is the default
+      - INTERVAL=180000 # in milliseconds
+      - MQTT_USERNAME=homeassistant
+      # - MQTT_PASSWORD=<REQUIRED, FILL IN>
+    ports:
+      - "9229:9229" # node inspector
