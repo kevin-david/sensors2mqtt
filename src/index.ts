@@ -263,7 +263,7 @@ while (true) {
           res = await client.publishAsync(
             `homeassistant/sensor/${haEntity.object_id}/config`,
             JSON.stringify(haEntity),
-            { qos: 2 }
+            { qos: 2, retain: true }
           );
         }
 
@@ -313,7 +313,7 @@ while (true) {
             res = await client.publishAsync(
               `homeassistant/sensor/${haEntity.object_id}/config`,
               JSON.stringify(haEntity),
-              { qos: 2 }
+              { qos: 2, retain: true }
             );
           }
 
