@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "child_process": "^1.0.2",
-    "mqtt": "^5.5.2",
+    "mqtt": "^5.7.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
