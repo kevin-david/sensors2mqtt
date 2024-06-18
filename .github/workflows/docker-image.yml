@@ -94,7 +94,7 @@ jobs:
           REPO_NAME: ${{ steps.docker_repo.outputs.DOCKER_NWO }}
       
       - name: Build & optionally push to Docker Hub
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: ${{ steps.vars.outputs.HAS_SECRET_TOKEN == 'true' && github.event_name != 'pull_request' }}
